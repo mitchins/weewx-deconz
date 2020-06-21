@@ -51,8 +51,8 @@ class DeconzService(StdService):
 
     def read_url(self, event):
         try:
-          with urllib.request.urlopen(self.sensor_url) as f:
-            data = json.loads(r.decode('utf-8'))
+          with urllib.request.urlopen(self.sensor_url) as r:
+            data = json.loads(r.read().decode('utf-8'))
             syslog.syslog(syslog.LOG_DEBUG, "deconz: received %s" % data)
             state = data['state']
             for target, alias in self._sensor_map.items():
