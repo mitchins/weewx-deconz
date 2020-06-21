@@ -40,20 +40,19 @@ from weewx.wxengine import StdService
 import urllib.request
 import json
 
-try:
-    # New-style weewx logging
-    import weeutil.logger
-    import logging
-    log = logging.getLogger(__name__)
+# New-style weewx logging
+import weeutil.logger
+import logging
+log = logging.getLogger(__name__)
 
-    def logdbg(msg):
-        log.debug(msg)
+def logdbg(msg):
+  log.debug(msg)
 
-    def loginf(msg):
-        log.info(msg)
+def loginf(msg):
+  log.info(msg)
 
-    def logerr(msg):
-        log.error(msg)
+def logerr(msg):
+  log.error(msg)
 
 class DeconzService(StdService):
     def __init__(self, engine, config_dict):
