@@ -19,11 +19,13 @@
 # To use this driver, put this file in the weewx user directory, then make
 # the following changes to weewx.conf:
 #
-# [Deconz]
+# [DeconzService]
 #  This section is for the Deconz data service.
     
 #  The url to use
 #  sensorURL = http://192.168.3.131:8888/api/30C70FAF3A/sensors/19
+#  [[sensor_map]]
+#     pressure = pressure
 
 # Tell weewx about the service by adding it to weewx.conf:
 
@@ -31,8 +33,7 @@
 #     [[Services]]
 #         data_services = ..., _
 
-#  [[sensor_map]]
-#     pressure = pressure
+
 
 import syslog
 import weewx
@@ -71,6 +72,10 @@ class DeconzService(StdService):
             state = data['state']
             for target, alias in self._sensor_map.items():
               if alias in state:
-                event.record[target] = float(state[alias])
+                value = float(state[alias])
+                # todo: neat etc. manage many-many mappings names/units
+                if alias == 'pressure':
+                  # convert hPa to inHG  
+                  event.record[target] = value 0.029529983071445
         except Exception as e:
             logerr("deconz: cannot read url: %s" % e)
