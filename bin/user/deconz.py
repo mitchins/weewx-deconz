@@ -57,7 +57,7 @@ def logerr(msg):
 class DeconzService(StdService):
     def __init__(self, engine, config_dict):
         super(DeconzService, self).__init__(engine, config_dict)    
-        d = config_dict.get('DeconzService', {})
+        d = config_dict.get('Deconz', {})
         self.sensor_url = d.get('sensorURL', '')
         loginf("deconz: using %s" % self.sensor_url)
         self._sensor_map = d.get('sensor_map', {})
