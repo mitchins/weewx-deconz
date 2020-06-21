@@ -76,6 +76,6 @@ class DeconzService(StdService):
                 # todo: neat etc. manage many-many mappings names/units
                 if alias == 'pressure':
                   # convert hPa to inHG  
-                  event.record[target] = value 0.029529983071445
+                  event.record[target] = value * 0.029529983071445
         except Exception as e:
             logerr("deconz: cannot read url: %s" % e)
