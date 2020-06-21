@@ -40,12 +40,27 @@ from weewx.wxengine import StdService
 import urllib.request
 import json
 
+try:
+    # New-style weewx logging
+    import weeutil.logger
+    import logging
+    log = logging.getLogger(__name__)
+
+    def logdbg(msg):
+        log.debug(msg)
+
+    def loginf(msg):
+        log.info(msg)
+
+    def logerr(msg):
+        log.error(msg)
+
 class DeconzService(StdService):
     def __init__(self, engine, config_dict):
         super(DeconzService, self).__init__(engine, config_dict)    
         d = config_dict.get('DeconzService', {})
         self.sensor_url = d.get('sensorURL', '')
-        syslog.syslog(syslog.LOG_INFO, "deconz: using %s" % self.sensor_url)
+        loginf("deconz: using %s" % self.sensor_url)
         self._sensor_map = d.get('sensor_map', {})
         self.bind(weewx.NEW_ARCHIVE_RECORD, self.read_url)
 
@@ -53,10 +68,10 @@ class DeconzService(StdService):
         try:
           with urllib.request.urlopen(self.sensor_url) as r:
             data = json.loads(r.read().decode('utf-8'))
-            syslog.syslog(syslog.LOG_DEBUG, "deconz: received %s" % data)
+            logdbg("deconz: received %s" % data)
             state = data['state']
             for target, alias in self._sensor_map.items():
               if alias in state:
                 event.record[target] = float(state[alias])
         except Exception as e:
-            syslog.syslog(syslog.LOG_ERR, "deconz: cannot read url: %s" % e)
+            logerr("deconz: cannot read url: %s" % e)
