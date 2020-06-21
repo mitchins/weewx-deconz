@@ -25,6 +25,12 @@
 #  The url to use
 #  sensorURL = http://192.168.3.131:8888/api/30C70FAF3A/sensors/19
 
+# Tell weewx about the service by adding it to weewx.conf:
+
+# [Engine]
+#     [[Services]]
+#         data_services = ..., _
+
 #  [[sensor_map]]
 #     pressure = pressure
 
@@ -39,7 +45,7 @@ class DeconzService(StdService):
         super(DeconzService, self).__init__(engine, config_dict)    
         d = config_dict.get('DeconzService', {})
         self.sensor_url = d.get('sensorURL', '')
-        syslog.syslog(syslog.LOG_INFO, "deconz: using %s" % self.sensor_urlp)
+        syslog.syslog(syslog.LOG_INFO, "deconz: using %s" % self.sensor_url)
         self._sensor_map = d.get('sensor_map', {})
         self.bind(weewx.NEW_ARCHIVE_RECORD, self.read_url)
 
